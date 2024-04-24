@@ -1,6 +1,5 @@
 <script setup>
-import { getCategory } from "@/apis/testAPI";
-getCategory();
+
 </script>
 
 <template>
