@@ -1,21 +1,8 @@
 <script setup>
-import { getCategoryAPI } from '@/apis/layout';
-import { onMounted, ref } from 'vue';
-
-// 获取全部分类业务
-const getCategory = async () => {
-  const res = await getCategoryAPI()
-  if (res.code !== '1') {
-    return
-  }
-  categoryList.value = res.result
-}
-
-const categoryList = ref([])
-
-onMounted(() => {
-  getCategory()
-})
+import { useCategoryStore } from '@/stores/category';
+import { storeToRefs } from 'pinia';
+const categoryStore = storeToRefs(useCategoryStore())
+const categoryList = categoryStore.categoryList
 </script>
 
 <template>
@@ -25,6 +12,9 @@ onMounted(() => {
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
+        <li class="home">
+          <RouterLink to="/">首页</RouterLink>
+        </li>
         <li class="home" v-for="item in categoryList" :key="item.id">
           <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
