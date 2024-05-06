@@ -1,3 +1,3 @@
 <template>
-    我是人气推荐
+  我是人气
 </template>
