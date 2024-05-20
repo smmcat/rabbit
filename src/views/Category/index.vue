@@ -1,39 +1,15 @@
 <script setup>
-import { getTopCategoryAPI } from '@/apis/category'
 import GoodsItem from '../Home/components/GoodsItem.vue';
-import { getBannerAPI } from '@/apis/home.js'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { userBanner } from './composables/userBanner';
+import { useCategory } from './composables/userCategory'
+
 
 // 获取面包屑导航数据
-const categoryData = ref({})
-const route = useRoute()
-
-const getCategory = async (id = route.params.id) => {
-  const res = await getTopCategoryAPI(id)
-  categoryData.value = res.result
-}
-onMounted(() => getCategory())
+const { categoryData } = useCategory()
 
 // 获取轮播图数据
-const bannerList = ref([])
-const getBanner = async () => {
-  const res = await getBannerAPI({
-    distributionSite: '2'
-  })
-  if (res.code !== '1') {
-    return
-  }
-  bannerList.value = res.result
-  console.log(bannerList.value);
-}
-onMounted(() => getBanner())
+const { bannerList } = userBanner()
 
-// 路由更新后执行的回调
-onBeforeRouteUpdate((to) => {
-  getCategory(to.params.id)
-})
 </script>
 <template>
   <div class="top-category">
@@ -57,7 +33,7 @@ onBeforeRouteUpdate((to) => {
         <h3>全部分类</h3>
         <ul>
           <li v-for="i in categoryData.children" :key="i.id">
-            <RouterLink to="/">
+            <RouterLink :to="`/category/sub/${i.id}`">
               <img v-img-lazy="i.picture" />
               <p>{{ i.name }}</p>
             </RouterLink>
