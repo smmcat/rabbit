@@ -1,9 +1,13 @@
 import httpInstance from "@/utils/http";
 
 // 获取 轮播图 数据
-export const getBannerAPI = () => {
+export const getBannerAPI = (params = {}) => {
+    const { distributionSite = '1' } = params
     return httpInstance({
-        url: 'home/banner'
+        url: 'home/banner',
+        params: {
+            distributionSite
+        }
     })
 }
 
@@ -37,6 +41,6 @@ export const getHotAPI = () => {
  */
 export const getGoodsAPI = () => {
     return httpInstance({
-      url: '/home/goods'
+        url: '/home/goods'
     })
-  }
+}
