@@ -2,13 +2,13 @@
 import { ref, watch } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
 
-const prop = defineProps({
+defineProps({
     imageList: {
         typeof: Array,
         default: () => []
     }
 })
-console.log(prop.imageList);
+
 // 图片列表
 // const imageList = [
 //     "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
@@ -70,13 +70,13 @@ watch([elementX, elementY, isOutside], () => {
 
         <!-- 左侧大图-->
         <div class="middle" ref="target">
-            <img :src="prop.imageList[activeIndex]" alt="" />
+            <img :src="imageList[activeIndex]" alt="" />
             <!-- 蒙层小滑块 -->
             <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
         </div>
         <!-- 小图列表 -->
         <ul class="small">
-            <li v-for="(img, i) in prop.imageList" :key="i" @mouseenter="enterhandler(i)"
+            <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)"
                 :class="{ active: i === activeIndex }">
                 <img :src="img" alt="" />
             </li>
@@ -84,7 +84,7 @@ watch([elementX, elementY, isOutside], () => {
         <!-- 放大镜大图 -->
         <div class="large" :style="[
             {
-                backgroundImage: `url(${prop.imageList[activeIndex]})`,
+                backgroundImage: `url(${imageList[activeIndex]})`,
                 backgroundPositionX: `${positionX}px`,
                 backgroundPositionY: `${positionY}px`,
             },
