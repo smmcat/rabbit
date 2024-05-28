@@ -10,7 +10,10 @@ export const useUserStore = defineStore('user', () => {
     const getUserInfo = async ({ account, password }) => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
-        console.log(userInfo.value);
     }
     return { userInfo, getUserInfo }
+}, {
+    persist: {
+        key: 'xiaotixian-user'
+    }
 })
