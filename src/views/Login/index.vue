@@ -1,5 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import { useRouter } from 'vue-router';
+
+const userStore = useUserStore()
 
 // 表单对象
 const form = ref({
@@ -26,6 +32,24 @@ const rules = {
     }
   ]
 }
+// 路由对象方法 
+const router = useRouter()
+// 获取表单实例
+const formRef = ref(null)
+const doLogin = () => {
+  const { account, password } = form.value
+  // 验证所有验证的状态
+  formRef.value.validate(async (valid) => {
+    // 完成校验
+    if (valid) {
+      await userStore.getUserInfo({ account, password })
+      // 1. 提示用户
+      ElMessage({ type: 'success', message: '登录成功' })
+      // 2. 跳转首页
+      router.replace({ path: '/' })
+    }
+  })
+}
 </script>
 
 
@@ -50,7 +74,7 @@ const rules = {
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+            <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model="form.account" />
               </el-form-item>
@@ -62,7 +86,7 @@ const rules = {
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
             </el-form>
           </div>
         </div>
