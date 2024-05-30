@@ -12,7 +12,7 @@ const cartStore = useCartStore()
             <div class="list">
                 <div class="item" v-for="i in cartStore.cartList" :key="i">
                     <RouterLink to="">
-                        <img :src="i.pic" alt="" />
+                        <img :src="i.picture" alt="" />
                         <div class="center">
                             <p class="name ellipsis-2">
                                 {{ i.name }}

@@ -1,5 +1,5 @@
 <script setup>
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/categoryStore';
 import HeaberCart from './HeaderCart.vue'
 import { storeToRefs } from 'pinia';
 const categoryStore = storeToRefs(useCategoryStore())

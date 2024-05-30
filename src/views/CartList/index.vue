@@ -12,6 +12,11 @@ const allCheck = (selected) => {
     // 调用 Pinia 对应方法
     cartStore.allCheck(selected)
 }
+
+// 清空所有商品
+const clearAllCart = async () => {
+    await cartStore.clearWebCart()
+}
 </script>
 
 <template>
@@ -40,7 +45,7 @@ const allCheck = (selected) => {
                             </td>
                             <td>
                                 <div class="goods">
-                                    <RouterLink to="/"><img :src="i.pic" alt="" /></RouterLink>
+                                    <RouterLink to="/"><img :src="i.picture" alt="" /></RouterLink>
                                     <div>
                                         <p class="name ellipsis">
                                             {{ i.name }}
@@ -60,7 +65,7 @@ const allCheck = (selected) => {
                             <td class="tc">
                                 <p>
                                     <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消"
-                                        @confirm="cartStore.delCart(i)">
+                                        @confirm="cartStore.delCart(i.skuId)">
                                         <template #reference>
                                             <a href="javascript:;">删除</a>
                                         </template>
@@ -72,7 +77,7 @@ const allCheck = (selected) => {
                             <td colspan="6">
                                 <div class="cart-none">
                                     <el-empty description="购物车列表为空">
-                                        <el-button type="primary">随便逛逛</el-button>
+                                        <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
                                     </el-empty>
                                 </div>
                             </td>
@@ -86,6 +91,14 @@ const allCheck = (selected) => {
                 <div class="batch">
                     共 {{ cartStore.allCount }} 件商品，已选择 {{ cartStore.selectedCount }} 件，商品合计：
                     <span class="red">¥ {{ cartStore.selectedPrice.toFixed(2) }} </span>
+                    <span v-if="cartStore.allCount">
+                        <el-popconfirm title="这将清除所有商品，确认清除吗？" confirm-button-text="确认" cancel-button-text="取消"
+                            @confirm="clearAllCart">
+                            <template #reference>
+                                <a href="javascript:;" style="font-size: 12px;text-decoration:underline;">清空购物车</a>
+                            </template>
+                        </el-popconfirm>
+                    </span>
                 </div>
                 <div class="total">
                     <el-button size="large" type="primary">下单结算</el-button>
