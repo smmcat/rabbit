@@ -1,7 +1,7 @@
 // 购物车模块
 
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
     // 购物车商品数据
@@ -30,10 +30,37 @@ export const useCartStore = defineStore('cart', () => {
         cartList.value.splice(idx, 1)
     }
 
+    // 单选功能
+    const singleCheck = (skuId, selected) => {
+        const item = cartList.value.find((item) => skuId === item.skuId)
+        if (item) {
+            item.selected = selected
+        }
+    }
+
+    // 全选功能
+    const allCheck = (selected) => {
+        cartList.value.forEach(item => item.selected = selected)
+    }
+
+    // 计算属性 - 总数量 总价 是否全选 已选择数量 已选择商品价钱合计
+    const allCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
+    const allPrice = computed(() => cartList.value.reduce((a, c) => a + c.count * c.price, 0))
+    const isAll = computed(() => cartList.value.every(item => item.selected))
+    const selectedCount = computed(() => cartList.value.filter(item => item.selected).reduce((a, c) => a + c.count, 0))
+    const selectedPrice = computed(() => cartList.value.filter(item => item.selected).reduce((a, c) => a + c.count * c.price, 0))
+
     return {
+        allCount,
+        allPrice,
         cartList,
+        isAll,
+        selectedCount,
+        selectedPrice,
         addCart,
-        delCart
+        delCart,
+        allCheck,
+        singleCheck
     }
 },
     {
