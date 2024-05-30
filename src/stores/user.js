@@ -11,7 +11,10 @@ export const useUserStore = defineStore('user', () => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
     }
-    return { userInfo, getUserInfo }
+    const clearUserInfo = () => {
+        userInfo.value = {}
+    }
+    return { userInfo, getUserInfo, clearUserInfo }
 }, {
     persist: {
         key: 'xiaotixian-user'

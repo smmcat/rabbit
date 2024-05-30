@@ -1,5 +1,6 @@
 <script setup>
 import { useCategoryStore } from '@/stores/category';
+import HeaberCart from './HeaderCart.vue'
 import { storeToRefs } from 'pinia';
 const categoryStore = storeToRefs(useCategoryStore())
 const categoryList = categoryStore.categoryList
@@ -24,7 +25,7 @@ const categoryList = categoryStore.categoryList
         <input type="text" placeholder="搜一搜">
       </div>
       <!-- 头部购物车 -->
-
+      <HeaberCart></HeaberCart>
     </div>
   </header>
 </template>
