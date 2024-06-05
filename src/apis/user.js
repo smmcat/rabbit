@@ -8,3 +8,12 @@ export const loginAPI = ({ account, password }) => {
         data: { account, password }
     })
 }
+
+export const getLikeListAPI = ({ limit = 4 }) => {
+    return request({
+      url:'/goods/relevant',
+      params: {
+        limit 
+      }
+    })
+  }
