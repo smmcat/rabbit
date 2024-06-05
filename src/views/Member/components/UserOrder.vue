@@ -11,8 +11,25 @@ const tabTypes = [
     { name: "complete", label: "已完成" },
     { name: "cancel", label: "已取消" }
 ]
+
+// 创建格式化函数
+const fomartPayState = (payState) => {
+    const stateMap = {
+        1: '待付款',
+        2: '待发货',
+        3: '待收货',
+        4: '待评价',
+        5: '已完成',
+        6: '已取消'
+    }
+    return stateMap[payState]
+}
+
 // 订单列表
 const orderList = ref([])
+// 加载等待
+let loading = ref(false)
+const total = ref(0)
 const paeams = ref({
     orderState: 0,
     page: 1,
@@ -21,8 +38,11 @@ const paeams = ref({
 
 // 获取订单列表
 const getOrderList = async () => {
+    loading.value = true;
     const res = await getUserOrder(paeams.value)
+    loading.value = false;
     orderList.value = res.result.items
+    total.value = res.result.counts
 }
 
 onMounted(() => getOrderList())
@@ -30,6 +50,12 @@ onMounted(() => getOrderList())
 // tab 栏切换
 const tabChange = (type) => {
     paeams.value.orderState = type
+    getOrderList()
+}
+
+// 页数切换
+const pageChange = (page) => {
+    paeams.value.page = page
     getOrderList()
 }
 </script>
@@ -40,7 +66,7 @@ const tabChange = (type) => {
             <!-- tab切换 -->
             <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
-            <div class="main-container">
+            <div class="main-container" v-loading="loading">
                 <div class="holder-container" v-if="orderList.length === 0">
                     <el-empty description="暂无订单数据" />
                 </div>
@@ -77,7 +103,7 @@ const tabChange = (type) => {
                                 </ul>
                             </div>
                             <div class="column state">
-                                <p>{{ order.orderState }}</p>
+                                <p>{{ fomartPayState(order.orderState) }}</p>
                                 <p v-if="order.orderState === 3">
                                     <a href="javascript:;" class="green">查看物流</a>
                                 </p>
@@ -113,7 +139,9 @@ const tabChange = (type) => {
                     </div>
                     <!-- 分页 -->
                     <div class="pagination-container">
-                        <el-pagination background layout="prev, pager, next" />
+                        <!-- total 总条数 pageSize 行值 -->
+                        <el-pagination @current-change="pageChange" :total="total" :pageSize="paeams.pageSize"
+                            background layout="prev, pager, next" />
                     </div>
                 </div>
             </div>
